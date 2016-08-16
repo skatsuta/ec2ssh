@@ -41,7 +41,9 @@ end
 
 if instances.empty?
   ec2 = Aws::EC2::Client.new
-  instances = ec2.describe_instances.reservations
+  instances = ec2.describe_instances(
+    filters: [{ name: 'instance-state-name', values: ['running'] }]
+  ).reservations
   File.open(CACHE, 'w') do |f|
     cache = { profile => { region => instances } }
     YAML.dump(cache, f)
@@ -50,7 +52,6 @@ end
 
 instances.each do |reservation|
   reservation.instances.each do |instance|
-    next unless instance.state.name == 'running'
     user = 'ec2-user'
     name = instance.instance_id
     dnsname = instance.public_dns_name || instance.private_dns_name
