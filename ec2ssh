@@ -1,9 +1,10 @@
 #!/bin/bash
+
 get_instances() {
   get_instances.rb $*| peco | cut -f 2
 }
 
-i=$(get_instances $*)
-if [[ -n $i ]];then
-  ssh -A ${i}
+host=$(get_instances $*)
+if [[ -n $host ]]; then
+  ssh -A $host
 fi
