@@ -2,10 +2,10 @@
 
 ## How to install
 
-- install percol, inifile and AWS SDK for Ruby v2
+- install peco, inifile and AWS SDK for Ruby v2
 
 ```
-pip install percol
+brew install peco
 gem install inifile aws-sdk
 ```
 
