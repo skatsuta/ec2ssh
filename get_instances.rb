@@ -7,7 +7,7 @@ require 'optparse'
 require 'yaml'
 
 CACHE = "#{Dir.home}/.ec2ssh".freeze
-CACHE_TTL = 300
+CACHE_TTL = 3600
 
 profile = 'default'
 options = {}
