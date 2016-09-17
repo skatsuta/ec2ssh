@@ -57,7 +57,7 @@ if instances.empty?
   end
 end
 
-list = instances.map do |instance|
+instances.each do |instance|
   user = 'ec2-user'
   name = instance.instance_id
   dnsname = instance.public_dns_name || instance.private_dns_name
@@ -65,6 +65,5 @@ list = instances.map do |instance|
     name = tag.value if tag.key =~ /^name/i
     user = tag.value if tag.key =~ /^user/i
   end
-  "\"#{name}\"\t#{user}@#{dnsname}\t#{instance.instance_id}"
-end.join("\n")
-puts list
+  puts "\"#{name}\"\t#{user}@#{dnsname}\t#{instance.instance_id}"
+end
