@@ -20,7 +20,7 @@ OptionParser.new do |opt|
     exit
   end
   opt.on('-f', '--flush', 'Flush cache') { options[:ignore] = true }
-  opt.on('-p PROFILE', '--profile PROFILE', 'Specify profile') do |v|
+  opt.on('-p', '--profile PROFILE', 'Specify profile') do |v|
     profile = "profile #{v}"
     Aws.config[:credentials] = Aws::SharedCredentials.new(profile_name: profile)
   end
