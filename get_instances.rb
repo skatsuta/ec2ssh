@@ -6,7 +6,7 @@ require 'inifile'
 require 'optparse'
 require 'yaml'
 
-AWS_CONFIG = File.join(Dir.home, '.aws', 'config').freeze
+CONFIG = File.join(Dir.home, '.aws', 'config').freeze
 CACHE = File.join(Dir.home, '.ec2ssh').freeze
 CACHE_TTL = 3600
 INSTANCE = Struct.new(:instance_id, :public_dns_name, :private_dns_name, :tags)
@@ -27,7 +27,7 @@ OptionParser.new do |opt|
   opt.parse!(ARGV)
 end
 
-ini = IniFile.load(AWS_CONFIG)
+ini = IniFile.load(CONFIG)
 region = ENV['REGION'] || ini[profile]['region']
 Aws.config[:region] = region
 
