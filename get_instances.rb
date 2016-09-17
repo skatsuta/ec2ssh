@@ -9,7 +9,7 @@ require 'yaml'
 AWS_CONFIG = File.join(Dir.home, '.aws', 'config').freeze
 CACHE = File.join(Dir.home, '.ec2ssh').freeze
 CACHE_TTL = 3600
-INSTANCE = Struct.new(:tags, :public_dns_name, :private_dns_name, :instance_id)
+INSTANCE = Struct.new(:instance_id, :public_dns_name, :private_dns_name, :tags)
 
 profile = 'default'
 options = {}
@@ -46,10 +46,10 @@ if instances.empty?
   instances = ec2.describe_instances(
     filters: [{ name: 'instance-state-name', values: ['running'] }]
   ).reservations.flat_map(&:instances).map! do |instance|
-    INSTANCE.new(instance.tags,
+    INSTANCE.new(instance.instance_id,
                  instance.public_dns_name,
                  instance.private_dns_name,
-                 instance.instance_id)
+                 instance.tags)
   end
   File.open(CACHE, 'w') do |f|
     cache = { profile => { region => instances } }
