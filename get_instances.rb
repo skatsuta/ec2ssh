@@ -9,7 +9,7 @@ require 'yaml'
 CONFIG = File.join(Dir.home, '.aws', 'config').freeze
 CACHE = File.join(Dir.home, '.ec2ssh').freeze
 CACHE_TTL = 3600
-INSTANCE = Struct.new(:instance_id, :public_dns_name, :private_dns_name, :tags)
+INSTANCE = Struct.new(:instance_id, :public_ip_address, :private_ip_address, :tags)
 
 profile = 'default'
 options = {}
@@ -47,8 +47,8 @@ if instances.empty?
     filters: [{ name: 'instance-state-name', values: ['running'] }]
   ).reservations.flat_map(&:instances).map! do |instance|
     INSTANCE.new(instance.instance_id,
-                 instance.public_dns_name,
-                 instance.private_dns_name,
+                 instance.public_ip_address,
+                 instance.private_ip_address,
                  instance.tags)
   end
   File.open(CACHE, 'w') do |f|
@@ -60,10 +60,10 @@ end
 instances.each do |instance|
   user = 'ec2-user'
   name = instance.instance_id
-  dnsname = instance.public_dns_name || instance.private_dns_name
+  ip_address = instance.public_ip_address || instance.private_ip_address
   instance.tags.each do |tag|
     name = tag.value if tag.key =~ /^name/i
     user = tag.value if tag.key =~ /^user/i
   end
-  puts "\"#{name}\"\t#{user}@#{dnsname}\t#{instance.instance_id}"
+  puts "\"#{name}\"\t#{user}@#{ip_address}\t#{instance.instance_id}"
 end
