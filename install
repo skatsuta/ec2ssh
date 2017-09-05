@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -eu
+
+SCRIPT_DIR="$(cd "$(dirname $0)" && pwd)"
+BIN_DIR="/usr/local/bin"
+for file in ec2ssh get_instances.rb; do
+  DST="$BIN_DIR/$file"
+
+  # skip if it already exists
+  if [[ -f "$DST" ]]; then
+    echo "$DST found: skipping..."
+    continue
+  fi
+
+  SRC="$SCRIPT_DIR/$file"
+  echo "Creating symlink from $SRC to $DST..."
+  ln -s "$SRC" "$DST"
+done
