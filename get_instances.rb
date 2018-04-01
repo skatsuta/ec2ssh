@@ -41,7 +41,7 @@ if File.exist?(CACHE) && options[:ignore].nil?
   end
 end
 
-if instances.empty?
+if instances.nil? || instances.empty?
   ec2 = Aws::EC2::Client.new
   instances = ec2.describe_instances(
     filters: [{ name: 'instance-state-name', values: ['running'] }]
